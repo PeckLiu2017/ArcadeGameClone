@@ -207,6 +207,7 @@ function update(dt) {
   updateEntities(dt);
   checkCollisions();
   checkMoveZone();
+  checkGameWin();
 }
 
 function checkCollisions() {
@@ -234,6 +235,15 @@ function checkMoveZone() {
   }
   if (player.y > 402) {
     player.y = 402;
+  }
+}
+
+function checkGameWin() {
+  if (player.y < 62) {
+    setTimeout(function () {
+      console.log('win');
+      reset();
+    },1000)
   }
 }
 
