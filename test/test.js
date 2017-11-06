@@ -245,7 +245,7 @@ Enemy.prototype.render = function() {
 };
 
 Enemy.prototype.endlessEnemy = function () {
-  if (this.x > 300) {
+  if (this.x > 400) {
     this.x = -100;
   }
 }
@@ -259,15 +259,23 @@ let Player = function () {
 }
 
 Player.prototype.update = function () {
-  
+
 }
 
 Player.prototype.render = function () {
   ctx.drawImage(Resources.get(this.player),this.x,this.y)
 }
 
-Player.prototype.handleInput = function () {
-
+Player.prototype.handleInput = function (opreation) {
+  if (opreation == 'left') {
+    this.x -= 100;
+  } else if (opreation == 'right') {
+    this.x += 100;
+  } else if (opreation == 'up') {
+    this.y -= 83;
+  } else if (opreation == 'down') {
+    this.y += 83;
+  }
 }
 
 // 现在实例化你的所有对象
@@ -293,6 +301,6 @@ document.addEventListener('keyup', function(e) {
     39: 'right',
     40: 'down'
   };
-
-  player.handleInput(allowedKeys[e.keyCode]);
+  // console.log(allowedKeys[e.keyCode]);
+  player.handleInput(allowedKeys[e.keyCode] || allowedKeys[e.which]);
 });
