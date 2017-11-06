@@ -52,7 +52,7 @@ function render() {
       ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
     }
   }
-  // 绘制敌人
+  // 绘制敌人和玩家
   renderEntities();
 }
 
@@ -65,7 +65,7 @@ function renderEntities() {
     enemy.render();
   });
 
-  // player.render();
+  player.render();
 }
 
 /* 这个函数用来让开发者拿到他们已经加载的图片的引用。如果这个图片被缓存了，
@@ -208,12 +208,12 @@ function updateEntities(dt) {
   allEnemies.forEach(function(enemy) {
     enemy.update(dt);
   });
-  player.update();
+  // player.update();
 }
 
 
 // 这是我们的玩家要躲避的敌人
-var Enemy = function(x,y,speed) {
+let Enemy = function(x,y,speed) {
   // 要应用到每个敌人的实例的变量写在这里
   // 我们已经提供了一个来帮助你实现更多
   this.x = x;
@@ -252,18 +252,36 @@ Enemy.prototype.endlessEnemy = function () {
 
 // 现在实现你自己的玩家类
 // 这个类需要一个 update() 函数， render() 函数和一个 handleInput()函数
-// let e1 = new Enemy(0,62,Math.random()*200);
-// let e2 = new Enemy(0,145,Math.random()*200);
-// let e3 = new Enemy(0,228,Math.random()*200);
-let e1 = new Enemy(0,62,200);
-let e2 = new Enemy(0,145,250);
-let e3 = new Enemy(0,228,300);
-// console.log(e1);
-allEnemies = [e1,e2,e3];
+let Player = function () {
+  this.x = 302;
+  this.y = 402;
+  this.player = 'images/char-boy.png';
+}
+
+Player.prototype.update = function () {
+  
+}
+
+Player.prototype.render = function () {
+  ctx.drawImage(Resources.get(this.player),this.x,this.y)
+}
+
+Player.prototype.handleInput = function () {
+
+}
 
 // 现在实例化你的所有对象
 // 把所有敌人的对象都放进一个叫 allEnemies 的数组里面
 // 把玩家对象放进一个叫 player 的变量里面
+// let e1 = new Enemy(0,62,Math.random()*200);
+// let e2 = new Enemy(0,145,Math.random()*200);
+// let e3 = new Enemy(0,228,Math.random()*200);
+let e1 = new Enemy(0,62,200),
+    e2 = new Enemy(0,145,250),
+    e3 = new Enemy(0,228,300),
+    player = new Player();
+// console.log(e1);
+allEnemies = [e1,e2,e3];
 
 
 // 这段代码监听游戏玩家的键盘点击事件并且代表将按键的关键数字送到 Play.handleInput()
