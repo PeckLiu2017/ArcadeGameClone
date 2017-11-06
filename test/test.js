@@ -65,7 +65,7 @@ function renderEntities() {
         enemy.render();
     });
 
-    player.render();
+    // player.render();
 }
 
 /* 这个函数用来让开发者拿到他们已经加载的图片的引用。如果这个图片被缓存了，
@@ -208,7 +208,8 @@ function updateEntities(dt) {
 var Enemy = function() {
     // 要应用到每个敌人的实例的变量写在这里
     // 我们已经提供了一个来帮助你实现更多
-
+    this.x = 0;
+    this.y = 0;
     // 敌人的图片或者雪碧图，用一个我们提供的工具函数来轻松的加载文件
     this.sprite = 'images/enemy-bug.png';
 };
@@ -217,7 +218,7 @@ var Enemy = function() {
 // 参数: dt ，表示时间间隙
 Enemy.prototype.update = function(dt) {
     // 你应该给每一次的移动都乘以 dt 参数，以此来保证游戏在所有的电脑上
-    // console.log(this);
+    console.log(this);
     // 都是以同样的速度运行的
     this.render();
 };
@@ -227,7 +228,9 @@ Enemy.prototype.render = function() {
   // console.log('1111');
   // console.log(Resources.get(this.sprite));
   // console.log(this.x);
-    ctx.drawImage(Resources.get(this.sprite), 101, 83);
+  this.x += 10;
+  this.y += 0;
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 // 现在实现你自己的玩家类
