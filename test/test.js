@@ -153,10 +153,19 @@ function onReady(func) {
  * 做一次就够了
  */
 function init() {
-  // reset();
+  reset();
   lastTime = Date.now();
   main();
 }
+
+/* 这个函数现在没干任何事，但是这会是一个好地方让你来处理游戏重置的逻辑。可能是一个
+ * 从新开始游戏的按钮，也可以是一个游戏结束的画面，或者其它类似的设计。它只会被 init()
+ * 函数调用一次。
+ */
+function reset() {
+    player.reset();
+}
+
 
 /* 这个函数是整个游戏的主入口，负责适当的调用 update / render 函数 */
 function main() {
@@ -196,7 +205,19 @@ function main() {
  */
 function update(dt) {
   updateEntities(dt);
-  // checkCollisions();
+  checkCollisions();
+}
+
+function checkCollisions() {
+  allEnemies.forEach(function (enemy) {
+    // console.log(enemy.x);
+    // console.log(player.x);
+    if(Math.abs(enemy.x - player.x) < 90 && Math.abs(enemy.y - player.y) < 63){
+      // 碰撞后游戏重新开始
+      // console.log('1111');
+      reset();
+    }
+  })
 }
 
 /* 这个函数会遍历在 app.js 定义的存放所有敌人实例的数组，并且调用他们的 update()
@@ -232,6 +253,7 @@ Enemy.prototype.update = function(dt) {
   this.x += this.speed * dt;
   // this.render();
   this.endlessEnemy();
+  return this.x;
 };
 
 // 此为游戏必须的函数，用来在屏幕上画出敌人，
@@ -277,6 +299,13 @@ Player.prototype.handleInput = function (opreation) {
     this.y += 83;
   }
 }
+
+Player.prototype.reset = function () {
+  this.x = 302;
+  this.y = 402;
+  // ctx.drawImage(Resources.get(this.player),302,402);
+}
+
 
 // 现在实例化你的所有对象
 // 把所有敌人的对象都放进一个叫 allEnemies 的数组里面
