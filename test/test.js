@@ -1,9 +1,11 @@
 window.Resources = {
     get: get,
-    load: load
+    load: load,
+    onReady: onReady,
 };
 
 var resourceCache = {};
+var readyCallbacks = [];
 
 let canvas = document.createElement('canvas'),
     ctx = canvas.getContext('2d');
@@ -40,11 +42,12 @@ function render() {
     /* 便利我们上面定义的行和列，用 rowImages 数组，在各自的各个位置绘制正确的图片 */
     for (row = 0; row < numRows; row++) {
         for (col = 0; col < numCols; col++) {
-          console.log(col);
+          // console.log(col);
             /* 这个 canvas 上下文的 drawImage 函数需要三个参数，第一个是需要绘制的图片
              * 第二个和第三个分别是起始点的x和y坐标。我们用我们事先写好的资源管理工具来获取
              * 我们需要的图片，这样我们可以享受缓存图片的好处，因为我们会反复的用到这些图片
              */
+             console.log(rowImages[row]);
             ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
         }
     }
@@ -82,13 +85,15 @@ function _load(url) {
         /* 一旦我们的图片已经被加载了，就把它放进我们的缓存，然后我们在开发者试图
          * 在未来再次加载这个图片的时候我们就可以简单的返回即可。
          */
+        //  console.log(img);
         resourceCache[url] = img;
         // 接下来要调用 drawImage 把图画出来
+        // ctx.drawImage(resourceCache[url], this.x, this.y);
         /* 一旦我们的图片已经被加载和缓存，调用所有我们已经定义的回调函数。
          */
-        // if(isReady()) {
-        //     readyCallbacks.forEach(function(func) { func(); });
-        // }
+        if(isReady()) {
+            readyCallbacks.forEach(function(func) { func(); });
+        }
     };
     /* 将一开始的缓存值设置成 false 。在图片的 onload 事件回调被调用的时候会
      * 改变这个值。最后，将图片的 src 属性值设置成传进来的 URl 。
@@ -123,7 +128,12 @@ Resources.load([
     'images/enemy-bug.png',
     'images/char-boy.png'
 ]);
-// Resources.onReady(init);
+Resources.onReady(init);
+
+/* 这个函数会在被请求的函数都被加载了这个事件的回调函数栈里面增加一个函数。*/
+function onReady(func) {
+    readyCallbacks.push(func);
+}
 
 /* 这个函数调用一些初始化工作，特别是设置游戏必须的 lastTime 变量，这些工作只用
  * 做一次就够了
@@ -155,5 +165,5 @@ function main() {
     /* 在浏览准备好调用重绘下一个帧的时候，用浏览器的 requestAnimationFrame 函数
      * 来调用这个函数
      */
-    // win.requestAnimationFrame(main);
+    win.requestAnimationFrame(main);
 }
