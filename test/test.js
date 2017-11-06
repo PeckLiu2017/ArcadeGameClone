@@ -206,18 +206,35 @@ function main() {
 function update(dt) {
   updateEntities(dt);
   checkCollisions();
+  checkMoveZone();
 }
 
 function checkCollisions() {
   allEnemies.forEach(function (enemy) {
     // console.log(enemy.x);
     // console.log(player.x);
-    if(Math.abs(enemy.x - player.x) < 90 && Math.abs(enemy.y - player.y) < 63){
+    if(Math.abs(enemy.x - player.x) < 90 && Math.abs(enemy.y - player.y) < 60){
       // 碰撞后游戏重新开始
       // console.log('1111');
       reset();
     }
   })
+}
+
+function checkMoveZone() {
+  if (player.x < 0) {
+    player.x = 2;
+    player.y = 402;
+  }
+  if (player.x > 402) {
+    player.x = 402;
+  }
+  if (player.y < 0) {
+    player.y = 0;
+  }
+  if (player.y > 402) {
+    player.y = 402;
+  }
 }
 
 /* 这个函数会遍历在 app.js 定义的存放所有敌人实例的数组，并且调用他们的 update()
@@ -313,9 +330,9 @@ Player.prototype.reset = function () {
 // let e1 = new Enemy(0,62,Math.random()*200);
 // let e2 = new Enemy(0,145,Math.random()*200);
 // let e3 = new Enemy(0,228,Math.random()*200);
-let e1 = new Enemy(0,62,200),
+let e1 = new Enemy(0,62,150),
     e2 = new Enemy(0,145,250),
-    e3 = new Enemy(0,228,300),
+    e3 = new Enemy(0,228,200),
     player = new Player();
 // console.log(e1);
 allEnemies = [e1,e2,e3];
