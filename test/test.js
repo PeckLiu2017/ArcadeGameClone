@@ -52,7 +52,7 @@ function render() {
       ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
     }
   }
-
+  // 绘制敌人
   renderEntities();
 }
 
@@ -172,8 +172,13 @@ function main() {
    */
   // 这里是先调整位置然后再重新 render 绘图
   update(dt);
+  // 绘制草地石路和河流
   render();
-
+  // console.log('111');
+  // e1 = new Enemy(0,62,Math.random()*200);
+  // e2 = new Enemy(0,145,Math.random()*200);
+  // e3 = new Enemy(0,228,Math.random()*200);
+  // allEnemies = [e1,e2,e3];
   /* 设置我们的 lastTime 变量，它会被用来决定 main 函数下次被调用的事件。 */
   lastTime = now;
 
@@ -199,19 +204,21 @@ function update(dt) {
  * 这些更新函数应该只聚焦于更新和对象相关的数据/属性。把重绘的工作交给 render 函数。
  */
 function updateEntities(dt) {
+  // 绘制出敌人
   allEnemies.forEach(function(enemy) {
     enemy.update(dt);
   });
-  // player.update();
+  player.update();
 }
 
 
 // 这是我们的玩家要躲避的敌人
-var Enemy = function() {
+var Enemy = function(x,y,speed) {
   // 要应用到每个敌人的实例的变量写在这里
   // 我们已经提供了一个来帮助你实现更多
-  this.x = 0;
-  this.y = 0;
+  this.x = x;
+  this.y = y;
+  this.speed = speed;
   // 敌人的图片或者雪碧图，用一个我们提供的工具函数来轻松的加载文件
   this.sprite = 'images/enemy-bug.png';
 };
@@ -222,8 +229,9 @@ Enemy.prototype.update = function(dt) {
   // 你应该给每一次的移动都乘以 dt 参数，以此来保证游戏在所有的电脑上
   // 都是以同样的速度运行的
   // console.log(this);
-  this.x += 100 * dt;
-  this.render();
+  this.x += this.speed * dt;
+  // this.render();
+  this.endlessEnemy();
 };
 
 // 此为游戏必须的函数，用来在屏幕上画出敌人，
@@ -236,11 +244,22 @@ Enemy.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+Enemy.prototype.endlessEnemy = function () {
+  if (this.x > 300) {
+    this.x = -100;
+  }
+}
+
 // 现在实现你自己的玩家类
 // 这个类需要一个 update() 函数， render() 函数和一个 handleInput()函数
-let e1 = new Enemy();
+// let e1 = new Enemy(0,62,Math.random()*200);
+// let e2 = new Enemy(0,145,Math.random()*200);
+// let e3 = new Enemy(0,228,Math.random()*200);
+let e1 = new Enemy(0,62,200);
+let e2 = new Enemy(0,145,250);
+let e3 = new Enemy(0,228,300);
 // console.log(e1);
-allEnemies = [e1];
+allEnemies = [e1,e2,e3];
 
 // 现在实例化你的所有对象
 // 把所有敌人的对象都放进一个叫 allEnemies 的数组里面
