@@ -75,8 +75,8 @@ var Engine = (function(global) {
    * @description
    * 这个函数被 main 函数（我们的游戏主循环）调用，
    * 它本身调用所有的需要更新游戏角色数据的函数 updateEntities(dt)
-   * 检查游戏碰撞事件的 checkCollisions() 函数
-   * 检查玩家移动边界的 checkMoveZone() 函数
+   * 检查游戏碰撞事件的在 app.js 中的 checkCollisions() 函数
+   * 检查玩家移动边界的在 app.js 中的 checkMoveZone() 函数
    * 检查游戏是否欧胜利的 checkGameWin()函数
    */
   function update(dt) {
@@ -84,24 +84,6 @@ var Engine = (function(global) {
     checkCollisions();
     checkMoveZone();
     checkGameWin();
-  }
-
-  /**
-   *  @description 检查玩家的移动范围是否超越边界，如果超越边界，就将位置调整
-   */
-  function checkMoveZone() {
-    if (player.x < 0) {
-      player.x = 2;
-    }
-    if (player.x > 402) {
-      player.x = 402;
-    }
-    if (player.y < 0) {
-      player.y = 0;
-    }
-    if (player.y > 402) {
-      player.y = 402;
-    }
   }
 
   /**
@@ -220,7 +202,7 @@ var Engine = (function(global) {
   }
 
   /* 紧接着我们来加载我们知道的需要来绘制我们游戏关卡的图片。然后把 init 方法设置为回调函数。
-   * 那么党这些图片都已经加载完毕的时候游戏就会开始。
+   * 那么当这些图片都已经加载完毕的时候游戏就会开始。
    */
   Resources.load([
     'images/stone-block.png',
