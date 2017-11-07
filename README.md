@@ -18,7 +18,7 @@ Click the index.html, you can run and play this game.
 
 ### How to play 
 
-Use ⬆️ ⬇️ ⬅️ ➡️ arrows to control the player's movement , you will win when you cross the middle rock road and get into the river opposite your origin position and see the text "Congratulations! You win! Just refresh this page!".
+Use ⬆️ ⬇️ ⬅️ ➡️ arrows to control the player's movement , you will win and see the text "Congratulations! You win! Just refresh this page!" when you cross the middle rock road and get into the river opposite your origin position .
 
 Avoid enemy hit the player if you don't want to lose and restart this game.
 
