@@ -1,17 +1,45 @@
 /**
  *  @description
+ *  这是一个游戏对象类
+ *  @param {number} this.x 游戏对象的初始位置的横坐标
+ *  @param {number} this.y 游戏对象的初始位置的纵坐标
+ *  @param {string} this.appearance 敌人的外观图片
+ */
+ let GameObject = function(x, y, appearance) {
+   this.x = x;
+   this.y = y;
+   this.appearance = appearance;
+ };
+
+/**
+ *  @description
  *  这是一个敌人类
  *  @param {number} this.x 敌人的初始位置的横坐标
  *  @param {number} this.y 敌人的初始位置的纵坐标
  *  @param {number} this.speed 表示敌人在每一次动画间隙的移动距离，是个长度单位，但这里把它叫做速度
  *  @param {number} this.sprite 敌人的外观图片
  */
-  let Enemy = function(x, y, speed) {
-    this.x = x;
-    this.y = y;
-    this.speed = speed;
-    this.sprite = 'images/enemy-bug.png';
+  GameObject.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.appearance), this.x, this.y);
   };
+
+/**
+ *  @description
+ *  这是一个敌人类，继承了 GameObject 类
+ *  @param {number} this.x 敌人的初始位置的横坐标
+ *  @param {number} this.y 敌人的初始位置的纵坐标
+ *  @param {number} this.speed 表示敌人在每一次动画间隙的移动距离，是个长度单位，但这里把它叫做速度
+ */
+  let Enemy = function(x, y, appearance, speed) {
+    GameObject.call(this, x, y, appearance);
+    this.speed = speed;
+  };
+
+  /**
+   *  @description
+   *  继承 GameObject 类的render 函数
+   */
+    Enemy.prototype = Object.create(GameObject.prototype);
 
 /**
  *  @description
@@ -27,50 +55,31 @@
 
 /**
  *  @description
- *  实时绘制游戏面板上敌人的位置
- *  @param {string} this.sprite 敌人的外观图片
- *  @param {number} this.x 文字初始显示位置的横坐标
- *  @param {number} this.y 文字初始显示位置的纵坐标
- */
-  Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-  };
-
-/**
- *  @description
  *  当敌人到达游戏画面的边界，就把它的横坐标调整到 -100 的位置，然后以同样的速度重复在 canvas 上的运动
- *  以造成无穷无尽敌人的视觉效果，其实来来回回只有三个敌人
- *  @param {number} this.x 敌人现在的横坐标
+ *  以造成无穷无尽敌人的视觉效果，其实来来回回只有六个敌人
+ *  @param {number} this.x 敌人现在的横坐标，横坐标的最大值设置为大于 canvas 的宽度时再调整，这样敌人消失的动画更自然
  */
   Enemy.prototype.endlessEnemy = function() {
-    if (this.x > 400) {
+    if (this.x > 505) {
       this.x = -100;
     }
   }
 
 /**
  *  @description
- *  这是一个玩家类
- *  @param {number} x 玩家初始位置的横坐标
- *  @param {number} y 玩家初始位置的纵坐标
- *  @param {string} this.player 玩家的外观
+ *  这是一个玩家类，继承了 GameObject 类
+ *  @param {number} this.x 玩家初始位置的横坐标
+ *  @param {number} this.y 玩家初始位置的纵坐标
  */
-  let Player = function() {
-    this.x = 302;
-    this.y = 402;
-    this.player = 'images/char-boy.png';
+  let Player = function(x, y, appearance) {
+    GameObject.call(this, x, y, appearance);
   }
 
 /**
  *  @description
- *  实时绘制游戏面板上玩家的位置
- *  @param {string} this.player 玩家的外观
- *  @param {number} this.x 玩家的横坐标
- *  @param {number} this.y 玩家的纵坐标
+ *  继承 GameObject 类的render 函数
  */
-  Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.player), this.x, this.y)
-  }
+  Player.prototype = Object.create(GameObject.prototype);
 
 /**
  *  @description
@@ -79,21 +88,38 @@
  *  @param {string} this.y 玩家的纵坐标
  */
   Player.prototype.handleInput = function(opreation) {
+    let CHANGE_ABSCISSA = 100;
+    let CHANGE_ORDINATE = 83;
     switch (opreation) {
       case 'left':
-        this.x -= 100;
+        this.x -= CHANGE_ABSCISSA;
         break;
       case 'right':
-        this.x += 100;
+        this.x += CHANGE_ABSCISSA;
         break;
       case 'up':
-        this.y -= 83;
+        this.y -= CHANGE_ORDINATE;
         break;
       case 'down':
-        this.y += 83;
+        this.y += CHANGE_ORDINATE;
         break;
     }
   }
+
+  /**
+   *  @description 检查玩家的移动范围是否超越边界，如果超越边界，就将位置调整
+   */
+    Player.prototype.checkMoveZone = function () {
+      if (this.x < 0) {
+        this.x = 2;
+      }
+      if (this.x > 402) {
+        this.x = 402;
+      }
+      if (this.y > 402) {
+        this.y = 402;
+      }
+    }
 
 /**
  *  @description
@@ -112,13 +138,13 @@
  *  把所有敌人的对象都放进一个叫 allEnemies 的数组里面
  *  把玩家对象放进一个叫 player 的变量里面
  */
-let enemyOne = new Enemy(0, 62, 90),
-    enemyTwo = new Enemy(0, 62, 150),
-    enemyThree = new Enemy(0, 228, 100),
-    enemyFour = new Enemy(0, 228, 160),
-    enemyFive = new Enemy(0, 311, 110),
-    enemySix = new Enemy(0, 311, 170);
-let player = new Player(),
+let enemyOne = new Enemy(0, 62, 'images/enemy-bug.png', 90),
+    enemyTwo = new Enemy(0, 62, 'images/enemy-bug.png', 150),
+    enemyThree = new Enemy(0, 228, 'images/enemy-bug.png', 100),
+    enemyFour = new Enemy(0, 228, 'images/enemy-bug.png', 160),
+    enemyFive = new Enemy(0, 311, 'images/enemy-bug.png', 110),
+    enemySix = new Enemy(0, 311, 'images/enemy-bug.png', 170);
+let player = new Player(302, 402, 'images/char-boy.png'),
     allEnemies = [enemyOne, enemyTwo, enemyThree, enemyFour, enemyFive, enemySix];
 
 /**
@@ -136,24 +162,6 @@ let player = new Player(),
         reset();
       }
     })
-  }
-
-/**
- *  @description 检查玩家的移动范围是否超越边界，如果超越边界，就将位置调整
- */
-  function checkMoveZone() {
-    if (player.x < 0) {
-      player.x = 2;
-    }
-    if (player.x > 402) {
-      player.x = 402;
-    }
-    if (player.y < 0) {
-      player.y = 0;
-    }
-    if (player.y > 402) {
-      player.y = 402;
-    }
   }
 
 /**
