@@ -3,6 +3,7 @@ body {
     background: black;
 }
 
+/* 游戏标题 div */
 .score-board {
   height: 4.5em;
   width: 55em;
@@ -11,6 +12,7 @@ body {
   font-weight: 400;
 }
 
+/* 游戏标题 h1 */
 h1 {
   margin: 0 auto;
   line-height: 4.5em;
