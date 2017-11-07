@@ -15,10 +15,11 @@ var Engine = (function(global) {
      * 创建 canvas 元素，拿到对应的 2D 上下文
      * 设置 canvas 元素的高/宽 然后添加到 dom 中
      */
-    var doc = global.document,
+    let doc = global.document,
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
+        gameWin = false,
         lastTime;
 
     canvas.width = 505;
@@ -53,6 +54,7 @@ var Engine = (function(global) {
      * 做一次就够了
      */
     function init() {
+        $('.font').find('p').hide();
         reset();
         lastTime = Date.now();
         main();
@@ -78,7 +80,6 @@ var Engine = (function(global) {
         player.x = 402;
       }
       if (player.y < 0) {
-        console.log(player.y);
         player.y = 0;
       }
       if (player.y > 402) {
@@ -88,7 +89,13 @@ var Engine = (function(global) {
 
     function checkGameWin() {
       if (player.y < 62) {
+        gameWin = true;
         setTimeout(function () {
+          // $('canvas').hide();
+          // $('canvas').css('display','none');
+          // ctx.font = "30px Arial";
+          // ctx.strokeText("Hello World",20,90);
+          // $('.font').find('p').slideDown();
           console.log('win');
           reset();
         },1000)
@@ -143,12 +150,20 @@ var Engine = (function(global) {
      * 对象中定义的 render 方法。
      */
     function renderEntities() {
+      if (gameWin) {
+        ctx.font = "35px Arial";
+        ctx.strokeText("Congratulations! You win! Click the restart button to play agin!",60,270);
+        setTimeout(function () {
+          confirm
+          reset();
+        },1000);
+      } else {
         /* 遍历在 allEnemies 数组中存放的作于对象然后调用你事先定义的 render 函数 */
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
         player.render();
+      }
     }
 
     /* 这个函数现在没干任何事，但是这会是一个好地方让你来处理游戏重置的逻辑。可能是一个
