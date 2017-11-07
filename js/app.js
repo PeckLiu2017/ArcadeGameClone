@@ -112,11 +112,14 @@
  *  把所有敌人的对象都放进一个叫 allEnemies 的数组里面
  *  把玩家对象放进一个叫 player 的变量里面
  */
-let enemyOne = new Enemy(0, 62, 150),
-  enemyTwo = new Enemy(0, 145, 250),
-  enemyThree = new Enemy(0, 228, 200);
+let enemyOne = new Enemy(0, 62, 90),
+    enemyTwo = new Enemy(0, 62, 150),
+    enemyThree = new Enemy(0, 228, 100),
+    enemyFour = new Enemy(0, 228, 160),
+    enemyFive = new Enemy(0, 311, 110),
+    enemySix = new Enemy(0, 311, 170);
 let player = new Player(),
-  allEnemies = [enemyOne, enemyTwo, enemyThree];
+    allEnemies = [enemyOne, enemyTwo, enemyThree, enemyFour, enemyFive, enemySix];
 
 /**
  *  @description
@@ -152,7 +155,7 @@ let player = new Player(),
       player.y = 402;
     }
   }
-  
+
 /**
  *  @description
  *  这段代码监听游戏玩家的键盘点击事件并且代表将按键的关键数字送到 Play.handleInput()

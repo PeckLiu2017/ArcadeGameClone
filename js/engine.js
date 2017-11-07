@@ -125,7 +125,7 @@ var Engine = (function(global) {
         'images/stone-block.png', // 第一行石头
         'images/stone-block.png', // 第二行石头
         'images/stone-block.png', // 第三行石头
-        'images/grass-block.png', // 第一行草地
+        'images/stone-block.png', // 第一行草地
         'images/grass-block.png' // 第二行草地
       ],
       numRows = 6,
@@ -152,7 +152,6 @@ var Engine = (function(global) {
    */
   function renderEntities() {
     if (gameWin) {
-      ctx.font = "35px Arial";
       startAnotherLine("Congratulations! You win! Just refresh this page!", 55, 250,390);
     } else {
       /* 遍历在 allEnemies 数组中存放的作于对象然后调用你事先定义的 render 函数 */
